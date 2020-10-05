@@ -1,0 +1,51 @@
+<%- | 
+      Hash $visiblecmdlets,
+      Optional[Array] $visiblecommands = [],
+      Optional[Array] $visibleproviders = [],
+| -%>
+@{
+<% if $visiblecmdlets.size != 0 { -%>
+VisibleCmdlets = 
+<% } -%>
+<%# These have the most complex structure, as they can be just a list of cmdlets -%>
+<%# The cmdlets can also have a set of optional parameters, and each of the optional -%>
+<%# parameters can also have a set of optional validation sets or regex -%>
+<%# The idea with the mapping, is to get each line built and put into an array -%>
+<%# and then just print out the joined array. -%>
+<% $fullcmdlets = $visiblecmdlets.map |$keys, $values| { -%>
+<%   if ! $values { -%>
+<%-     "'${keys}'" -%>
+<%   }else{ -%>
+<%     $parameters = $values['parameters'].map |$param| { -%>
+<%       if $values['validatesets'] and $values['validatesets'][$param] { -%>
+<%         $validsets = $values['validatesets'][$param].map |$set| {"'${set}'"} -%>
+<%         $joinedsets = $validsets.join(',') -%>
+<%-         "@{ Name = '${param}';ValidateSet= ${joinedsets} }" -%>
+<%       }elsif  $values['validatepattern'] and $values['validatepattern'][$param]  { -%>
+<%         $validpatterns = $values['validatepattern'][$param].map |$set| {"'${set}'"} -%>
+<%         $joinedsets = $validpatterns.join(',') -%>
+<%-         "@{ Name = '${param}';ValidatePattern= ${joinedsets} }" -%>
+<%       } else { -%>
+<%-         "@{Name  = '$param'}" -%>
+<%       } -%>
+<%     } -%>
+<%     $joinedparameters = $parameters.join(',') -%>
+<%-     "@{ Name = '${keys}';Parameters = ${joinedparameters} }" -%>
+<%   } -%>
+<% } -%>
+<%= $fullcmdlets.join(",\n") %>
+<%# The visible commands are just a list of names, so assuming that they are used -%>
+<%# Then just put quotes around then and print them as comma separated -%>
+<% if $visiblecommands.size != 0 { -%>
+<% $fullcommands = $visiblecommands.map |$fcommands| {"'${fcommands}'"} -%>
+VisibleExternalCommands = 
+<%= $fullcommands.join(",\n") %>
+<% } -%>
+<%# The providers are just a list of names, so assuming that they are used -%>
+<%# Then just put quotes around then and print them as comma separated -%>
+<% if $visibleproviders.size != 0 { -%>
+<% $fullproviders = $visibleproviders.map |$fproviders| {"'${fproviders}'"} -%>
+VisibleProviders = 
+<%= $fullproviders.join(",\n") %>
+<% } -%>
+}

@@ -1,0 +1,15 @@
+<%- | Enum['RestrictedRemoteServer','Empty','Default'] $sessiontype,
+      Hash $roledefinitions
+| -%>
+
+
+@{
+SessionType = '<%= $sessiontype %>'
+RunAsVirtualAccount = '$true'
+RoleDefinitions = @{
+<% $roledefinitions.keys.each |$identity| { -%>
+  <% $newarray= $roledefinitions[$identity].map |$node| {"'${node}'"} -%>
+    '<%= $identity %>' = @{ RoleCapabilities = <%= $newarray.join(',') %> }
+<% } -%>
+  }
+}

@@ -1,0 +1,20 @@
+<%- | 
+      Array $visiblecmdlets,
+      Optional[Array] $visiblecommands = [],
+      Optional[Array] $visibleproviders = [],
+| -%>
+@{
+VisibleCmdlets = 
+<% $fullcmdlets = $visiblecmdlets.map |$fcmdlet| {"  @{ Name = '${fcmdlet}'; Parameters = @{Name = 'Name' }}"} -%>
+<%= $fullcmdlets.join(",\n") %>
+<% if $visiblecommands.size != 0 { -%>
+<% $fullcommands = $visiblecommands.map |$fcommands| {"'${fcommands}'"} -%>
+VisibleExternalCommands = 
+<%= $fullcommands.join(",\n") %>
+<% } -%>
+<% if $visibleproviders.size != 0 { -%>
+<% $fullproviders = $visibleproviders.map |$fproviders| {"'${fproviders}'"} -%>
+VisibleProviders = 
+<%= $fullproviders.join(",\n") %>
+<% } -%>
+}
