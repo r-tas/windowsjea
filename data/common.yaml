@@ -1,0 +1,58 @@
+#a work in progress
+##sample hiera file to drive the creation of JEA configuration files
+#jea::basedirectory::psdir: 'C:\Program Files\WindowsPowerShell'
+jea::testing::roledefinitiondetails:
+  'johntest':
+    'visiblecmdlets':
+      'restart-service':
+      'get-runspace':
+        'parameters':
+          - 'name'
+          - 'computername'
+          - 'Throttlelimit'
+        'validatesets':
+          'name':
+            - 'john'
+            - 'bob'
+    'visiblecommands':
+      - 'C:\Windows\System32\whoami.exe'
+      - 'C:\Windows\System32\expand.exe'
+    'visibleproviders':
+      - 'winrm'
+      - 'powershell'
+  'johntest2':
+    'visiblecmdlets':
+      'restart-service':
+      'get-runspace':
+        'parameters':
+          - 'name'
+          - 'computername'
+          - 'Throttlelimit'
+        'validatesets':
+          'name':
+            - 'john2'
+            - 'bob2'
+    'visiblecommands':
+      - 'C:\Windows\System32\whoami.exe'
+      - 'C:\Windows\System32\expand.exe'
+    'visibleproviders':
+      - 'winrm'
+      - 'powershell'
+  'johntest3':
+    'visiblecmdlets':
+      'restart-service':
+      'get-runspace':
+        'parameters':
+          - 'name'
+          - 'computername'
+          - 'Throttlelimit'
+        'validatesets':
+          'name':
+            - 'john3'
+            - 'bob3'
+    'visiblecommands':
+      - 'C:\Windows\System32\whoami.exe'
+      - 'C:\Windows\System32\expand.exe'
+    'visibleproviders':
+      - 'winrm'
+      - 'powershell'

@@ -1,9 +1,48 @@
 <%- | 
-      Hash $visiblecmdlets,
+      Hash $visiblecmdlets = {},
+      Optional[Array] $visiblealiases = [],
+      Optional[Hash] $visiblefunctions = {},
       Optional[Array] $visiblecommands = [],
       Optional[Array] $visibleproviders = [],
+      Optional[Array] $scriptstoprocessrole = [],
+      Optional[Hash] $aliasdefinitions = {},
+      Optional[Hash] $functiondefinitions = {},
+#     Optional[Array] $variabledefinitions = [],
+      Optional[Hash] $environmentvariables = {},
+      Optional[Array] $typestoprocess = [],
+      Optional[Array] $formatstoprocess = [],
 | -%>
 @{
+<% if $visiblealiases.size != 0 { -%>
+<% $fullvisiblealiases = $visiblealiases.map |$faliases| {"'${faliases}'"} -%>
+VisibleAliases = <%= $fullvisiblealiases.join(',') %>
+<% } -%>
+<% if $visiblefunctions.size != 0 { -%>
+VisibleFunctions = 
+<% } -%>
+<% $fullfunctions = $visiblefunctions.map |$keyfunct, $valuesfunct| { -%>
+<%   if ! $valuesfunct { -%>
+<%-     "'${keyfunct}'" -%>
+<%   }else{ -%>
+<%     $parametersfunction = $valuesfunct['parameters'].map |$paramfunct| { -%>
+<%       if $valuesfunct['validatesets'] and $valuesfunct['validatesets'][$paramfunct] { -%>
+<%         $validsetsfunct = $valuesfunct['validatesets'][$paramfunct].map |$setfunct| {"'${setfunct}'"} -%>
+<%         $joinedsetsfunct = $validsetsfunct.join(',') -%>
+<%-         "@{ Name = '${paramfunct}';ValidateSet= ${joinedsetsfunct} }" -%>
+<%       }elsif  $valuesfunct['validatepattern'] and $valuesfunct['validatepattern'][$paramfunct]  { -%>
+<%         $validpatternsfunct = $valuesfunct['validatepattern'][$paramfunct].map |$setfunct| {"'${setfunct}'"} -%>
+<%         $joinedsetsfunct = $validpatternsfunct.join(',') -%>
+<%-         "@{ Name = '${paramfunct}';ValidatePattern= ${joinedsetsfunct} }" -%>
+<%       } else { -%>
+<%-         "@{Name  = '$paramfunct'}" -%>
+<%       } -%>
+<%     } -%>
+<%     $joinedparametersfunct = $parametersfunction.join(',') -%>
+<%-     "@{ Name = '${keyfunct}';Parameters = ${joinedparametersfunct} }" -%>
+<%   } -%>
+<% } -%>
+<%= $fullfunctions.join(",\n") %>
+<%  -%>
 <% if $visiblecmdlets.size != 0 { -%>
 VisibleCmdlets = 
 <% } -%>
@@ -48,4 +87,30 @@ VisibleExternalCommands =
 VisibleProviders = 
 <%= $fullproviders.join(",\n") %>
 <% } -%>
+<% if $scriptstoprocessrole.size != 0 { -%>
+<% $fullscriptsrole = $scriptstoprocessrole.map |$fscriptsrole| {"'${fscriptsrole}'"} -%>
+ScriptsToProcess = <%= $fullscriptsrole.join(',') %>
+<% } -%>
+<% if $aliasdefinitions.size != 0 { -%>
+AliasDefinitions = 
+<% } -%>
+<% $fullaliasdef = $aliasdefinitions.map |$keyaliasdef, $valuesaliasdef| { -%>
+<%-     "@{ Name = '${keyaliasdef}';Value = '${valuesaliasdef}' }" -%>
+<% } -%>
+<%= $fullaliasdef.join(",\n") -%>
+<% if $environmentvariables.size != 0 { -%>
+EnvironmentVariables = 
+<% } -%>
+<% $fullenvariables= $environmentvariables.map |$keyvariable, $valuevariable| { -%>
+<%-     "@{ '${keyvariable}' = '${valuevariable}' }" -%>
+<% } -%>
+<%= $fullenvariables.join(",\n") -%>
+<% if $typestoprocess.size != 0 { -%>
+<% $fulltypes = $typestoprocess.map |$types| {"'${ftypes}'"} -%>
+TypesToProcess = <%= $fulltypes.join(',') %>
+<% } -%>
+<% if $formatstoprocess.size != 0 { -%>
+<% $fullformats = $formatstoprocess.map |$fformats| {"'${fformats}'"} -%>
+FormatsToProcess = <%= $fullformats.join(',') %>
+<% } %>
 }

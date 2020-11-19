@@ -1,11 +1,19 @@
 <%- | Enum['RestrictedRemoteServer','Empty','Default'] $sessiontype,
-      Hash $roledefinitions
+      Hash $roledefinitions,
+      String $runasvirtualaccountstring,
+      Optional[String] $transcriptdirectory = '',
+      Optional[Array] $scriptstoprocess = [],
 | -%>
 
 
 @{
 SessionType = '<%= $sessiontype %>'
-RunAsVirtualAccount = '$true'
+RunAsVirtualAccount = <%= $runasvirtualaccountstring %>
+TranscriptDirectory = <%= $transcriptdirectory %>
+<% if $scriptstoprocess.size != 0 { -%>
+<% $fullscripts = $scriptstoprocess.map |$fscripts| {"'${fscripts}'"} -%>
+ScriptsToProcess = <%= $fullscripts.join(',') %>
+<% } -%>
 RoleDefinitions = @{
 <% $roledefinitions.keys.each |$identity| { -%>
   <% $newarray= $roledefinitions[$identity].map |$node| {"'${node}'"} -%>
