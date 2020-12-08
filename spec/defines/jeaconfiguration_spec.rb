@@ -18,75 +18,75 @@ describe 'windowsjea::jeaconfiguration' do
       'roledefinitions' =>
         {
           'DOMAIN\User1' => ['johntest1'],
-	  'DOMAIN\Group1' => ['johntest1','johntest2'],
-	},
+          'DOMAIN\Group1' => ['johntest1','johntest2'],
+        },
       'roledefinitiondetails' => 
         {
           'johntest1' =>
-	    {
+            {
               'visiblecmdlets' =>
-	        {
-		  'restart-service' => '',
-		  'get-runspace' =>
-		    {
+                {
+                  'restart-service' => '',
+                  'get-runspace' =>
+         	    {
                       'parameters' => ['name','computername','Throttlelimit'],
-		      'validatesets' => { 'name' => ['john','bob'] },
+                      'validatesets' => { 'name' => ['john','bob'] },
                     }
-		},
+        	},
               'visiblecommands' =>
-	        [
+                [
                   'C:\Windows\System32\whoami.exe',
-		  'C:\Windows\System32\expand.exe'
-		],
+                  'C:\Windows\System32\expand.exe'
+                ],
               'visibleproviders' =>
-	        [
+                [
                   'winrm',
-		  'powershell'
-		],
-	    },
+                  'powershell'
+                ],
+            },
           'johntest2' =>
-	    {
+            {
               'visiblecmdlets' =>
-	        {
-		  'restart-service' => '',
-		  'get-runspace' =>
-		    {
+                {
+                  'restart-service' => '',
+                  'get-runspace' =>
+                    {
                       'parameters' => ['name','computername','Throttlelimit'],
-		      'validatesets' => { 'name' => ['john','bob'] },
+                      'validatesets' => { 'name' => ['john','bob'] },
                     }
-		},
+                },
               'visiblecommands' =>
-	        [
+                [
                   'C:\Windows\System32\whoami.exe',
-		  'C:\Windows\System32\expand.exe'
-		],
+                  'C:\Windows\System32\expand.exe'
+                ],
               'visibleproviders' =>
-	        [
+                [
                   'winrm',
-		  'powershell'
+                  'powershell'
 		],
 	    },
-        }
+        },
     }
   end
 
   context 'with default configuration' do
     it { is_expected.to compile }
     it {
-      contenttext = "\\n"
-      contenttext += "\\n"
-      contenttext += "@{"
-      contenttext += "SessionType = 'RestrictedRemoteServer'"
-      contenttext += "RunAsVirtualAccount = '\$true'"
-      contenttext += "RoleDefinitions = @{"
-      contenttext += "      'DOMAIN\\User1' = @{ RoleCapabilities = 'johntest' }"
-      contenttext += "      'DOMAIN\\Group1' = @{ RoleCapabilities = 'johntest','johntest2' }"
-      contenttext += "  }"
-      contenttext += "}"
+      contenttext = '\n'
+      contenttext += '\n'
+      contenttext += '@{'
+      contenttext += 'SessionType = \'RestrictedRemoteServer\''
+      contenttext += 'RunAsVirtualAccount = \'\$true\''
+      contenttext += 'RoleDefinitions = @{'
+      contenttext += '      'DOMAIN\\User1' = @{ RoleCapabilities = \'johntest\' }'
+      contenttext += '      'DOMAIN\\Group1' = @{ RoleCapabilities = \'johntest\',\'johntest2\' }'
+      contenttext += '  }'
+      contenttext += '}'
       is_expected.to contain_file('C:/Program Files/WindowsPowerShell/PSRemoteConfigurations/myconfig.pssc')
         .with(
           'ensure' => 'file',
-	  'content' => contenttext,
+          'content' => contenttext,
         ).that_requires('Class[windowsjea::basedirectory]')
     }
     it { is_expected.to have_resource_count(4) }
