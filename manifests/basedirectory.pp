@@ -6,7 +6,7 @@
 #or sourced from other profiles, because we canot have each profile/user
 #trying to create the same resources.  So we provide the directories
 #and they/we can drop in config files
-class jea::basedirectory{
+class windowsjea::basedirectory{
   file{'C:/Program Files/WindowsPowerShell/PSRemoteConfigurations':
     ensure => directory,
   }

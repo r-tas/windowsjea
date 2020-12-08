@@ -6,21 +6,17 @@
 #or sourced from other profiles, because we canot have each profile/user
 #trying to create the same resources.  So we provide the directories
 #and they/we can drop in config files
-class jea::jeatest(
+class windowsjea::jeatest(
   $sessiontype = {},
   $roledefinitions = {},
   $roledefinitiondetails = {},
-# $author = '',
-# $description = '',
   $transcriptdirectory = 'C:\Transcripts',
   $runasvirtualaccount = true,
   $scriptstoprocess = [],
 ){
-  jea::jeaconfiguration{'lukasztesting1':
-    configname            => 'lukasztesting1',
+  windowsjea::jeaconfiguration{'test2':
+    configname            => 'test2',
     sessiontype           => 'RestrictedRemoteServer',
-#    author                => $author,
-#    description           => $description,
     runasvirtualaccount   => $runasvirtualaccount,
     transcriptdirectory   => $transcriptdirectory,
     scriptstoprocess      => $scriptstoprocess,

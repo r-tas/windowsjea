@@ -2,7 +2,7 @@
 #this will accept parameters
 #lay down the two files based on templates
 #then register the file
-define jea::jeaconfiguration(
+define windowsjea::jeaconfiguration(
   String $configname,
   Hash $roledefinitions,
   Hash $roledefinitiondetails,
@@ -19,7 +19,7 @@ define jea::jeaconfiguration(
   }
   file {"C:/Program Files/WindowsPowerShell/PSRemoteConfigurations/${configname}.pssc":
     ensure  => 'file',
-    content => epp('jea/session_configuration_template.epp',
+    content => epp('windowsjea/session_configuration_template.epp',
                     { 'sessiontype'               => $sessiontype,
                       'runasvirtualaccountstring' => $runasvirtualaccountstring,
                       'transcriptdirectory'       => $transcriptdirectory,
@@ -27,12 +27,12 @@ define jea::jeaconfiguration(
                       'roledefinitions'           => $roledefinitions,
                     }
                   ),
-    require => Class['jea::basedirectory'],
+    require => Class['windowsjea::basedirectory'],
   }
   $roledefinitiondetails.each |String $key, Hash $value| {
     file {"C:/Program Files/WindowsPowerShell/Modules/JEA/Rolecapabilities/${key}.psrc":
       ensure  => 'file',
-      content => epp('jea/role_capabilities_template.epp',
+      content => epp('windowsjea/role_capabilities_template.epp',
                       { 'visiblealiases'       => $value['visiblealiases'],
                         'visiblefunctions'     => $value['visiblefunctions'],
                         'visiblecmdlets'       => $value['visiblecmdlets'],
@@ -40,13 +40,14 @@ define jea::jeaconfiguration(
                         'visibleproviders'     => $value['visibleproviders'],
                         'scriptstoprocessrole' => $value['scriptstoprocessrole'],
                         'aliasdefinitions'     => $value['aliasdefinitions'],
-#                       'functiondefinitions'  => $value['functiondefinitions'],
+                        'functiondefinitions'  => $value['functiondefinitions'],
+                        'variabledefinitions'  => $value['variabledefinitions'],
                         'environmentvariables' => $value['environmentvariables'],
                         'typestoprocess'       => $value['typestoprocess'],
                         'formatstoprocess'     => $value['formatstoprocess'],
                       }
                     ),
-      require => Class['jea::basedirectory'],
+      require => Class['windowsjea::basedirectory'],
     }
   }
   exec{"register configuration ${configname}":

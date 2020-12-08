@@ -7,7 +7,7 @@
       Optional[Array] $scriptstoprocessrole = [],
       Optional[Hash] $aliasdefinitions = {},
       Optional[Hash] $functiondefinitions = {},
-#     Optional[Array] $variabledefinitions = [],
+      Optional[Hash] $variabledefinitions = {},
       Optional[Hash] $environmentvariables = {},
       Optional[Array] $typestoprocess = [],
       Optional[Array] $formatstoprocess = [],
@@ -41,7 +41,7 @@ VisibleFunctions =
 <%-     "@{ Name = '${keyfunct}';Parameters = ${joinedparametersfunct} }" -%>
 <%   } -%>
 <% } -%>
-<%= $fullfunctions.join(",\n") %>
+<%= $fullfunctions.join(",\r\n") %>
 <%  -%>
 <% if $visiblecmdlets.size != 0 { -%>
 VisibleCmdlets = 
@@ -72,20 +72,20 @@ VisibleCmdlets =
 <%-     "@{ Name = '${keys}';Parameters = ${joinedparameters} }" -%>
 <%   } -%>
 <% } -%>
-<%= $fullcmdlets.join(",\n") %>
+<%= $fullcmdlets.join(",\r\n") %>
 <%# The visible commands are just a list of names, so assuming that they are used -%>
 <%# Then just put quotes around then and print them as comma separated -%>
 <% if $visiblecommands.size != 0 { -%>
 <% $fullcommands = $visiblecommands.map |$fcommands| {"'${fcommands}'"} -%>
 VisibleExternalCommands = 
-<%= $fullcommands.join(",\n") %>
+<%= $fullcommands.join(",\r\n") %>
 <% } -%>
 <%# The providers are just a list of names, so assuming that they are used -%>
 <%# Then just put quotes around then and print them as comma separated -%>
 <% if $visibleproviders.size != 0 { -%>
 <% $fullproviders = $visibleproviders.map |$fproviders| {"'${fproviders}'"} -%>
 VisibleProviders = 
-<%= $fullproviders.join(",\n") %>
+<%= $fullproviders.join(",\r\n") %>
 <% } -%>
 <% if $scriptstoprocessrole.size != 0 { -%>
 <% $fullscriptsrole = $scriptstoprocessrole.map |$fscriptsrole| {"'${fscriptsrole}'"} -%>
@@ -97,14 +97,28 @@ AliasDefinitions =
 <% $fullaliasdef = $aliasdefinitions.map |$keyaliasdef, $valuesaliasdef| { -%>
 <%-     "@{ Name = '${keyaliasdef}';Value = '${valuesaliasdef}' }" -%>
 <% } -%>
-<%= $fullaliasdef.join(",\n") -%>
+<%= $fullaliasdef.join(",\r\n") -%>
 <% if $environmentvariables.size != 0 { -%>
 EnvironmentVariables = 
 <% } -%>
 <% $fullenvariables= $environmentvariables.map |$keyvariable, $valuevariable| { -%>
 <%-     "@{ '${keyvariable}' = '${valuevariable}' }" -%>
 <% } -%>
-<%= $fullenvariables.join(",\n") -%>
+<%= $fullenvariables.join(",\r\n") -%>
+<% if $functiondefinitions.size != 0 { -%>
+FunctionDefinitions = 
+<% } -%>
+<% $fullfunctiondef = $functiondefinitions.map |$keyfunctdef, $valuesfunctdef| { -%>
+<%-     "@{ Name = '${keyfunctdef}';Scriptblock = { ${$valuesfunctdef} } }" -%>
+<% } -%>
+<%= $fullfunctiondef.join(",\r\n") %>
+<% if $variabledefinitions.size != 0 { -%>
+VariableDefinitions = 
+<% } -%>
+<% $fullvariabledef = $variabledefinitions.map |$keyvardef, $valuesvardef| { -%>
+<%-     "@{ Name = '${keyvardef}';Value = { ${$valuesvardef} } }" -%>
+<% } -%>
+<%= $fullvariabledef.join(",\r\n") %>
 <% if $typestoprocess.size != 0 { -%>
 <% $fulltypes = $typestoprocess.map |$types| {"'${ftypes}'"} -%>
 TypesToProcess = <%= $fulltypes.join(',') %>

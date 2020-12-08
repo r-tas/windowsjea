@@ -6,7 +6,7 @@
 #or sourced from other profiles, because we canot have each profile/user
 #trying to create the same resources.  So we provide the directories
 #and they/we can drop in config files
-class jea::testing(
+class windowsjea::testing(
   $sessiontype = {},
   $roledefinitions = {},
   $roledefinitiondetails = {},
@@ -14,7 +14,7 @@ class jea::testing(
   $runasvirtualaccount = true,
   $scriptstoprocess = [],
 ){
-  jea::jeaconfiguration{'johntesting1':
+  windowsjea::jeaconfiguration{'johntesting1':
     configname       => 'johntesting1',
     sessiontype      => 'RestrictedRemoteServer',
     roledefinitions  => $roledefinitions,

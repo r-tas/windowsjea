@@ -4,12 +4,10 @@
       Optional[String] $transcriptdirectory = '',
       Optional[Array] $scriptstoprocess = [],
 | -%>
-
-
 @{
 SessionType = '<%= $sessiontype %>'
 RunAsVirtualAccount = <%= $runasvirtualaccountstring %>
-TranscriptDirectory = <%= $transcriptdirectory %>
+TranscriptDirectory = '<%= $transcriptdirectory %>'
 <% if $scriptstoprocess.size != 0 { -%>
 <% $fullscripts = $scriptstoprocess.map |$fscripts| {"'${fscripts}'"} -%>
 ScriptsToProcess = <%= $fullscripts.join(',') %>
