@@ -79,8 +79,8 @@ describe 'windowsjea::jeaconfiguration' do
       contenttext += 'SessionType = \'RestrictedRemoteServer\''
       contenttext += 'RunAsVirtualAccount = \'\$true\''
       contenttext += 'RoleDefinitions = @{'
-      contenttext += '      'DOMAIN\\User1' = @{ RoleCapabilities = \'johntest\' }'
-      contenttext += '      'DOMAIN\\Group1' = @{ RoleCapabilities = \'johntest\',\'johntest2\' }'
+      contenttext += '      \'DOMAIN\\User1\' = @{ RoleCapabilities = \'johntest\' }'
+      contenttext += '      \'DOMAIN\\Group1\' = @{ RoleCapabilities = \'johntest\',\'johntest2\' }'
       contenttext += '  }'
       contenttext += '}'
       is_expected.to contain_file('C:/Program Files/WindowsPowerShell/PSRemoteConfigurations/myconfig.pssc')
