@@ -4,6 +4,7 @@ require 'spec_helper'
 
 describe 'windowsjea::basedirectory' do
   let(:facts) { { 'operatingsystem' => 'windows' } }
+
   context 'with default configuration' do
     it { is_expected.to compile }
     it { is_expected.to contain_file('C:/Program Files/WindowsPowerShell/PSRemoteConfigurations').with('ensure' => 'directory') }
