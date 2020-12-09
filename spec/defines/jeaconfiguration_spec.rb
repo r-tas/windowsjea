@@ -51,9 +51,9 @@ describe 'windowsjea::jeaconfiguration' do
                   'restart-service' => '',
                   'get-runspace' =>
                     {
-                      'parameters' => ['name','computername', 'Throttlelimit'],
+                      'parameters' => ['name', 'computername', 'Throttlelimit'],
                       'validatesets' => { 'name' => ['john', 'bob'] },
-                    }
+                    },
                 },
               'visiblecommands' =>
                 [
@@ -65,7 +65,7 @@ describe 'windowsjea::jeaconfiguration' do
                   'winrm',
                   'powershell',
                 ],
-	    },
+            },
         },
     }
   end
