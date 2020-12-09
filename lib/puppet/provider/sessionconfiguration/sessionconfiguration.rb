@@ -7,7 +7,6 @@
 # end
 
 Puppet::Type.type(:sessionconfiguration).provide(:sessionconfiguraiton) do
-    defaultfor :osfamily => :windows
-    confine :osfamily => :windows
+  defaultfor osfamily: :windows
+  confine osfamily: :windows
 end
-
