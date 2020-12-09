@@ -16,57 +16,57 @@ describe 'windowsjea::jeaconfiguration' do
       'configname' => 'myconfig',
       'sessiontype' => 'RestrictedRemoteServer',
       'roledefinitions' =>
+      {
+        'DOMAIN\User1'  => ['johntest1'],
+        'DOMAIN\Group1' => ['johntest1', 'johntest2'],
+      },
+      'roledefinitiondetails' =>
+      {
+        'johntest1' =>
         {
-          'DOMAIN\User1' => ['johntest1'],
-	  'DOMAIN\Group1' => ['johntest1','johntest2'],
-	},
-      'roledefinitiondetails' => 
+          'visiblecmdlets' =>
+          {
+            'restart-service' => '',
+            'get-runspace' =>
+              {
+                'parameters'   => ['name', 'computername', 'Throttlelimit'],
+                'validatesets' => { 'name' => ['john', 'bob'] },
+              },
+          },
+          'visiblecommands' =>
+          [
+            'C:\Windows\System32\whoami.exe',
+            'C:\Windows\System32\expand.exe',
+          ],
+          'visibleproviders' =>
+          [
+            'winrm',
+            'powershell',
+          ],
+        },
+        'johntest2' =>
         {
-          'johntest1' =>
-	    {
-              'visiblecmdlets' =>
-	        {
-		  'restart-service' => '',
-		  'get-runspace' =>
-		    {
-                      'parameters' => ['name','computername','Throttlelimit'],
-		      'validatesets' => { 'name' => ['john','bob'] },
-                    }
-		},
-              'visiblecommands' =>
-	        [
-                  'C:\Windows\System32\whoami.exe',
-		  'C:\Windows\System32\expand.exe'
-		],
-              'visibleproviders' =>
-	        [
-                  'winrm',
-		  'powershell'
-		],
-	    },
-          'johntest2' =>
-	    {
-              'visiblecmdlets' =>
-	        {
-		  'restart-service' => '',
-		  'get-runspace' =>
-		    {
-                      'parameters' => ['name','computername','Throttlelimit'],
-		      'validatesets' => { 'name' => ['john','bob'] },
-                    }
-		},
-              'visiblecommands' =>
-	        [
-                  'C:\Windows\System32\whoami.exe',
-		  'C:\Windows\System32\expand.exe'
-		],
-              'visibleproviders' =>
-	        [
-                  'winrm',
-		  'powershell'
-		],
-	    },
-        }
+          'visiblecmdlets' =>
+          {
+            'restart-service' => '',
+            'get-runspace' =>
+            {
+              'parameters'   => ['name', 'computername', 'Throttlelimit'],
+              'validatesets' => { 'name' => ['john', 'bob'] },
+            },
+          },
+          'visiblecommands' =>
+          [
+            'C:\Windows\System32\whoami.exe',
+            'C:\Windows\System32\expand.exe',
+          ],
+          'visibleproviders' =>
+          [
+            'winrm',
+            'powershell',
+          ],
+        },
+      },
     }
   end
 
@@ -85,8 +85,8 @@ describe 'windowsjea::jeaconfiguration' do
       contenttext += "}"
       is_expected.to contain_file('C:/Program Files/WindowsPowerShell/PSRemoteConfigurations/myconfig.pssc')
         .with(
-          'ensure' => 'file',
-	  'content' => contenttext,
+          'ensure'  => 'file',
+          'content' => contenttext,
         ).that_requires('Class[windowsjea::basedirectory]')
     }
     it { is_expected.to have_resource_count(4) }
