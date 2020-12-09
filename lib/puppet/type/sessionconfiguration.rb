@@ -14,8 +14,7 @@ Puppet::Type.newtype(:sessionconfiguration) do
   newproperty(:configpath) do
     desc 'Configuration file path'
     validate do |value|
-      fail("Invalid path specified") unless value =~
-        /^(\w:\\.+$)/
+      fail('Invalid path specified') unless value =~ %r{^(\w:\\.+$)}
     end
   end
 end
