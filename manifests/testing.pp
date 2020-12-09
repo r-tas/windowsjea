@@ -15,9 +15,9 @@ class windowsjea::testing(
   $scriptstoprocess = [],
 ){
   windowsjea::jeaconfiguration{'johntesting1':
-    configname       => 'johntesting1',
-    sessiontype      => 'RestrictedRemoteServer',
-    roledefinitions  => $roledefinitions,
+    configname             => 'johntesting1',
+    sessiontype            => 'RestrictedRemoteServer',
+    roledefinitions        => $roledefinitions,
     roledefinitiondetails  => $roledefinitiondetails,
   }
 }
